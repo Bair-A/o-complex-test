@@ -10,3 +10,8 @@ export function extractTextFromHtml(htmlString: string) {
     body,
   };
 }
+
+export function isPhoneValid(phone: string): boolean {
+  const digits = phone.replace(/\D/g, '');
+  return digits.length === 11;
+}
