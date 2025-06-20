@@ -3,4 +3,14 @@ export type RawReview = {
   text: string;
 };
 
-export type ProcessedReview = { id: number; title: string; body: string };
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+}
+
+export type ProcessedReview = {
+  id: number;
+  title: string;
+  body: string;
+  gender: Gender;
+};

@@ -2,9 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { REVIEWS_API_URL } from '@/configs/configs';
-import { RawReview, ProcessedReview } from '@/types/types';
+import { RawReview, ProcessedReview, Gender } from '@/types/types';
 import { extractTextFromHtml } from '@/utils/utils';
-import MaleAvatar from '@/assets/icons/MaleAvatar';
+import { Stack } from '@chakra-ui/react';
+import ReviewCard from '@/components/content/ReviewCard';
+import Loader from '@/components/common/Loader';
+import { CenteredBox } from '@/components/common/CenteredBox';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<ProcessedReview[]>([]);
@@ -18,12 +21,13 @@ const Reviews = () => {
         const processedReviews: ProcessedReview[] = rawReviews.map(
           (review: RawReview) => ({
             id: review.id,
+            gender: Gender.Male,
             ...extractTextFromHtml(review.text),
           }),
         );
         setReviews(processedReviews);
       } catch (error) {
-        console.error('Error fetching reviews:', error);
+        console.error('Ошибка при загрузке отзывов:', error);
       } finally {
         setLoading(false);
       }
@@ -33,29 +37,19 @@ const Reviews = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <CenteredBox>
+        <Loader />
+      </CenteredBox>
+    );
   }
 
   return (
-    <div>
-      <h1>Отзывы</h1>
-      <div style={{ display: 'grid', gap: '16px' }}>
-        {reviews.map((review) => (
-          <div
-            key={review.id}
-            style={{
-              border: '1px solid #ccc',
-              borderRadius: '8px',
-              padding: '16px',
-            }}
-          >
-            <MaleAvatar />
-            <h1>{review.title}</h1>
-            <p>{review.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Stack gap="4" direction="row" wrap="wrap" justify="center" align="center">
+      {reviews.map((review) => (
+        <ReviewCard key={review.id} review={review} />
+      ))}
+    </Stack>
   );
 };
 export default Reviews;
