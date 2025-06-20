@@ -14,3 +14,7 @@ export type ProcessedReview = {
   body: string;
   gender: Gender;
 };
+
+export type CartItem = { title: string; price: number; quantity: number };
+
+export type Cart = { [id: number]: CartItem };

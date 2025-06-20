@@ -2,10 +2,11 @@
 
 import { Button, Field, Input, Stack, Center } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { withMask } from 'use-mask-input';
 import { isPhoneValid } from '@/utils/utils';
+import { useCart } from '@/components/providers/CartProvider';
 
 interface FormValues {
   phone: string;
@@ -15,6 +16,7 @@ const OrderForm = () => {
   const [customerPhone, setCustomerPhone] = useState('');
   const [isPhoneInValid, setIsPhoneInValid] = useState(false);
   const { register } = useForm<FormValues>();
+  const { cart } = useCart();
 
   const onSubmit = () => {
     if (isPhoneValid(customerPhone)) {
@@ -30,9 +32,29 @@ const OrderForm = () => {
   };
 
   return (
-    <Center mt={'100px'}>
+    <Center
+      mt={'100px'}
+      flexDirection={'column'}
+      style={{
+        marginBottom: '20px',
+        border: '1px solid #ccc',
+        padding: '10px',
+      }}
+    >
+      <h2 style={{ fontWeight: 'bold' }}>Добавленные товары</h2>
+      <div>
+        {Object.entries(cart).map(([id, product]) => {
+          return (
+            <div key={id}>
+              {product.title} - {product.quantity} шт. (Цена:{' '}
+              {product.price * product.quantity} ₽)
+            </div>
+          );
+        })}
+      </div>
+
       <form onSubmit={onSubmit}>
-        <Stack gap="4" align="flex-start" maxW="sm">
+        <Stack gap="4" maxW="md" flexDirection="row">
           <Field.Root invalid={isPhoneInValid}>
             <Input
               placeholder="+7 (___) ___-__-__"
