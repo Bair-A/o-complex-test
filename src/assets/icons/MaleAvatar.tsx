@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MaleAvatar = ({ size = 32 }: { size?: number }) => (
   <svg
     version="1.1"
