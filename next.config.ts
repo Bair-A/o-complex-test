@@ -1,7 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  basePath: '/o-complex-test',
+  output: 'export',
 };
 
 export default nextConfig;
