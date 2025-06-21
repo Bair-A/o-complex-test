@@ -62,7 +62,17 @@ const Products = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          gap: '35px',
+          maxWidth: '1000px',
+          margin: '0 auto',
+        }}
+      >
         {products.map((product) => (
           <ProductCard
             key={product.id}

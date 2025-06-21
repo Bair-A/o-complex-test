@@ -1,5 +1,6 @@
 import React from 'react';
 import { Product } from '@/types/types';
+import { Button, Input } from '@chakra-ui/react';
 
 const ProductCard: React.FC<{
   addToCart: (product: Product) => void;
@@ -17,7 +18,7 @@ const ProductCard: React.FC<{
       border: '1px solid #ccc',
       borderRadius: '8px',
       padding: '16px',
-      width: '200px',
+      width: '300px',
     }}
   >
     <img
@@ -29,8 +30,17 @@ const ProductCard: React.FC<{
     <p>{product.description}</p>
     <p>Цена: {product.price} ₽</p>
     {cart[product.id] ? (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <button
+      <div
+        style={{
+          marginTop: '32px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+        }}
+      >
+        <Button
+          variant="subtle"
           onClick={() =>
             updateCart(
               product.id,
@@ -41,9 +51,11 @@ const ProductCard: React.FC<{
           }
         >
           -
-        </button>
-        <input
+        </Button>
+        <Input
           type="number"
+          variant="subtle"
+          color="white"
           value={cart[product.id].quantity}
           onChange={(e) =>
             updateCart(
@@ -55,7 +67,8 @@ const ProductCard: React.FC<{
           }
           style={{ width: '50px', textAlign: 'center' }}
         />
-        <button
+        <Button
+          variant="subtle"
           onClick={() =>
             updateCart(
               product.id,
@@ -66,10 +79,17 @@ const ProductCard: React.FC<{
           }
         >
           +
-        </button>
+        </Button>
       </div>
     ) : (
-      <button onClick={() => addToCart(product)}>Купить</button>
+      <Button
+        variant="subtle"
+        mt={'32px'}
+        style={{ width: '100%' }}
+        onClick={() => addToCart(product)}
+      >
+        Купить
+      </Button>
     )}
   </div>
 );
