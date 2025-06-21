@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Product } from '@/types/types';
 import { Button, Input } from '@chakra-ui/react';
