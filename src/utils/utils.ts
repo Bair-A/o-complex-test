@@ -15,3 +15,7 @@ export function isPhoneValid(phone: string): boolean {
   const digits = phone.replace(/\D/g, '');
   return digits.length === 11;
 }
+
+export function formatPhoneNumber(phone: string): string {
+  return phone.replace(/\D/g, '');
+}
