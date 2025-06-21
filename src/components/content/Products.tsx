@@ -1,14 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useCart } from '@/components/providers/CartProvider';
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  image_url: string;
-}
+import ProductCard from '@/components/content/ProductCard';
+import { Product } from '@/types/types';
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -33,33 +27,34 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  const addToCart = (product: Product) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [product.id]: {
-        title: product.title,
-        price: product.price,
-        quantity: 1,
-      },
-    }));
-  };
+  const addToCart = useCallback(
+    (product: Product) => {
+      setCart((prevCart) => ({
+        ...prevCart,
+        [product.id]: {
+          title: product.title,
+          price: product.price,
+          quantity: 1,
+        },
+      }));
+    },
+    [setCart],
+  );
 
-  const updateCart = (
-    id: number,
-    title: string,
-    price: number,
-    quantity: number,
-  ) => {
-    setCart((prevCart) => {
-      const updatedCart = { ...prevCart };
-      if (quantity <= 0) {
-        delete updatedCart[id];
-      } else {
-        updatedCart[id] = { title, price, quantity };
-      }
-      return updatedCart;
-    });
-  };
+  const updateCart = useCallback(
+    (id: number, title: string, price: number, quantity: number) => {
+      setCart((prevCart) => {
+        const updatedCart = { ...prevCart };
+        if (quantity <= 0) {
+          delete updatedCart[id];
+        } else {
+          updatedCart[id] = { title, price, quantity };
+        }
+        return updatedCart;
+      });
+    },
+    [setCart],
+  );
 
   if (loading) {
     return <div>Загрузка...</div>;
@@ -67,72 +62,15 @@ const Products = () => {
 
   return (
     <div>
-      {/* Карточки товаров */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
         {products.map((product) => (
-          <div
+          <ProductCard
             key={product.id}
-            style={{
-              border: '1px solid #ccc',
-              borderRadius: '8px',
-              padding: '16px',
-              width: '200px',
-            }}
-          >
-            <img
-              src={product.image_url}
-              alt={product.title}
-              style={{ width: '100%', borderRadius: '8px' }}
-            />
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
-            <p>Цена: {product.price} ₽</p>
-            {cart[product.id] ? (
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <button
-                  onClick={() =>
-                    updateCart(
-                      product.id,
-                      product.title,
-                      product.price,
-                      cart[product.id].quantity - 1,
-                    )
-                  }
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  value={cart[product.id].quantity}
-                  onChange={(e) =>
-                    updateCart(
-                      product.id,
-                      product.title,
-                      product.price,
-                      Number(e.target.value),
-                    )
-                  }
-                  style={{ width: '50px', textAlign: 'center' }}
-                />
-                <button
-                  onClick={() =>
-                    updateCart(
-                      product.id,
-                      product.title,
-                      product.price,
-                      cart[product.id].quantity + 1,
-                    )
-                  }
-                >
-                  +
-                </button>
-              </div>
-            ) : (
-              <button onClick={() => addToCart(product)}>Купить</button>
-            )}
-          </div>
+            product={product}
+            addToCart={addToCart}
+            updateCart={updateCart}
+            cart={cart}
+          />
         ))}
       </div>
     </div>

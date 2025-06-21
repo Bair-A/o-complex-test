@@ -18,3 +18,11 @@ export type ProcessedReview = {
 export type CartItem = { title: string; price: number; quantity: number };
 
 export type Cart = { [id: number]: CartItem };
+
+export type Product = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  image_url: string;
+};
